@@ -14,7 +14,14 @@ public class BallController : MonoBehaviour
     void LaunchBall()
     {
         Vector2 direction = new Vector2(Random.Range(-1f, 1f), 1).normalized;
-        rb.linearVelocity = direction * speed;   
+        rb.linearVelocity = direction * speed; 
+    }
+
+    public void ResetBall()
+    {
+        rb.linearVelocity = Vector2.zero; // Detenemos la bola
+        transform.position = Vector3.zero; // Puedes ajustar la posición si quieres
+        LaunchBall(); // La relanzamos
     }
 
     void OnCollisionEnter2D(Collision2D collision)
@@ -24,13 +31,4 @@ public class BallController : MonoBehaviour
             Destroy(collision.gameObject);
         }
     }
-
-    public void ResetBall()
-    {
-        rb.linearVelocity = Vector2.zero;
-        transform.position = Vector3.zero;
-        Invoke(nameof(LaunchBall), 1f); 
-    }
-
 }
-
