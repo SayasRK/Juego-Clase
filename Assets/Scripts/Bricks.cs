@@ -8,12 +8,11 @@ public class Brick : MonoBehaviour
 
     private void OnDestroy()
     {
-        if (GameManager.Instance != null)
-        {
-            GameManager.Instance.BrickDestroyed(pointValue);
-        }
+        if (GameManager.Instance == null) return;
+        if (GameManager.Instance.IsRestarting) return;
 
-        TryDropPowerUp(); //Intenta soltar un POWER-UP
+        GameManager.Instance.BrickDestroyed(pointValue);
+        TryDropPowerUp();
     }
 
     void TryDropPowerUp()

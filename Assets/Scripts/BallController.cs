@@ -3,11 +3,20 @@
 public class BallController : MonoBehaviour
 {
     public float speed = 8f;
+    public bool isExtraBall = false;
+
     private Rigidbody2D rb;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+
+        SpriteRenderer sr = GetComponent<SpriteRenderer>();
+        if (sr != null)
+        {
+            sr.color = isExtraBall ? Color.blue : Color.white;
+        }
+
         LaunchBall();
     }
 

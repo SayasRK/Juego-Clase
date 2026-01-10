@@ -21,12 +21,16 @@ public class PowerUp_BolaExtra : MonoBehaviour
 
     void SpawnExtraBall()
     {
-        Vector3 spawnPos = transform.position;
-        GameObject newBall = Instantiate(ballPrefab, spawnPos, Quaternion.identity);
-        newBall.tag = "BallExtra";
+        GameObject newBall = Instantiate(ballPrefab, transform.position, Quaternion.identity);
 
-        Rigidbody2D rb = newBall.GetComponent<Rigidbody2D>();
-        Vector2 dir = new Vector2(Random.Range(-1f, 1f), 1).normalized;
-        rb.linearVelocity = dir * 8f;
+        // Marcar como bola extra (esto es lo importante)
+        BallController bc = newBall.GetComponent<BallController>();
+        if (bc != null)
+        {
+            bc.isExtraBall = true;
+        }
+
+        newBall.tag = "BallExtra";
     }
 }
+

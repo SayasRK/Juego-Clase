@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -11,6 +12,14 @@ public class GameManager : MonoBehaviour
 
     public TextMeshProUGUI livesText;
     public TextMeshProUGUI scoreText;
+
+    public GameObject winText;
+    public GameObject ballPrefab;
+    public Transform ballSpawnPoint;
+
+    public bool IsRestarting = false;
+
+
 
     private void Awake()
     {
@@ -52,9 +61,10 @@ public class GameManager : MonoBehaviour
 
         if (remainingBricks <= 0)
         {
-            Debug.Log("YOU WIN");
+            WinGame();
         }
     }
+
 
     // ---------- LIVES ----------
     public void LoseLife()
@@ -64,13 +74,38 @@ public class GameManager : MonoBehaviour
 
         if (lives <= 0)
         {
-            Debug.Log("GAME OVER");
+            RestartGame();
+            return;
         }
+
+        SpawnBall();
     }
+
 
     void UpdateLivesUI()
     {
         if (livesText != null)
             livesText.text = "Lives: " + lives;
     }
+
+    void SpawnBall()
+    {
+        Instantiate(ballPrefab, ballSpawnPoint.position, Quaternion.identity);
+    }
+
+    void RestartGame()
+    {
+        IsRestarting = true;
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    void WinGame()
+    {
+        Time.timeScale = 0f;
+
+        if (winText != null)
+            winText.SetActive(true);
+    }
+
 }
