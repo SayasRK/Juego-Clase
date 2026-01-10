@@ -31,6 +31,12 @@ public class BrickSpawner : MonoBehaviour
                 
                 SpriteRenderer sr = brick.GetComponent<SpriteRenderer>();
                 sr.color = GetColorByRow(row);
+
+                Brick brickScript = brick.GetComponent<Brick>();
+                brickScript.pointValue = rows - row;
+
+                GameManager.Instance.RegisterBrick();
+
             }
         }
     }

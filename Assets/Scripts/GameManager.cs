@@ -1,14 +1,16 @@
-using UnityEngine;
-using UnityEngine.SceneManagement;
 using TMPro;
+using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
 
     public int lives = 3;
-    public BallController ball;
+    public int score = 0;
+    public int remainingBricks = 0;
+
     public TextMeshProUGUI livesText;
+    public TextMeshProUGUI scoreText;
 
     private void Awake()
     {
@@ -20,9 +22,41 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        UpdateLivesUI(); // Mostrar vidas al empezar
+        UpdateLivesUI();
+        UpdateScoreUI();
     }
 
+    // ---------- SCORE ----------
+    public void AddScore(int amount)
+    {
+        score += amount;
+        UpdateScoreUI();
+    }
+
+    void UpdateScoreUI()
+    {
+        if (scoreText != null)
+            scoreText.text = "Score: " + score;
+    }
+
+    // ---------- BRICKS ----------
+    public void RegisterBrick()
+    {
+        remainingBricks++;
+    }
+
+    public void BrickDestroyed(int points)
+    {
+        remainingBricks--;
+        AddScore(points);
+
+        if (remainingBricks <= 0)
+        {
+            Debug.Log("YOU WIN");
+        }
+    }
+
+    // ---------- LIVES ----------
     public void LoseLife()
     {
         lives--;
@@ -30,16 +64,13 @@ public class GameManager : MonoBehaviour
 
         if (lives <= 0)
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-        }
-        else
-        {
-            ball.ResetBall();
+            Debug.Log("GAME OVER");
         }
     }
 
     void UpdateLivesUI()
     {
-        livesText.text = "Vidas: " + lives;
+        if (livesText != null)
+            livesText.text = "Lives: " + lives;
     }
 }
