@@ -5,7 +5,7 @@ public class BrickSpawner : MonoBehaviour
     public GameObject brickPrefab;
     public int rows = 6;
     public int columns = 10;
-    public float spacing = 0.2f;
+    public float spacing = 0.3f;
     public Vector2 startPos = new Vector2(-7.5f, 4f);
 
     void Start()

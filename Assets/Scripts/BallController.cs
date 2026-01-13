@@ -35,6 +35,34 @@ public class BallController : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
+        //Colision de la pala
+
+        if (collision.gameObject.CompareTag("Paddle"))
+        {
+            float paddleX = collision.transform.position.x;
+            float hitX = transform.position.x;
+
+            float paddleWidth = collision.collider.bounds.size.x;
+
+            float offset = (hitX - paddleX) / (paddleWidth / 2f);
+
+            Vector2 currentDir = rb.linearVelocity.normalized;
+            Vector2 paddleDir = new Vector2(offset, 1f).normalized;
+
+            float influence = 0.6f;
+            //Cambiando esto conseguimos que el rebote sea mas o menos natural, mas o menos fuerte. 
+
+            Vector2 finalDir = Vector2.Lerp(currentDir, paddleDir, influence).normalized;
+            rb.linearVelocity = finalDir * speed;
+
+            return;
+
+            //Control del comportamiento de la bola y ajuste del rebote contra la pala
+            //Para poder conseguir esa fluidez de la trayectoria de la bola 
+        }
+
+        // Colision del ladrillo 
+
         if (collision.gameObject.CompareTag("Brick"))
         {
             Brick brick = collision.gameObject.GetComponent<Brick>();
