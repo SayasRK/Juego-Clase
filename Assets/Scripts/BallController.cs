@@ -58,13 +58,8 @@ public class BallController : MonoBehaviour
 
         if (collision.gameObject.CompareTag("Brick"))
         {
-            Brick brick = collision.gameObject.GetComponent<Brick>();
-            if (brick != null)
-            {
-                GameManager.Instance.AddScore(brick.pointValue);
-            }
-
             Destroy(collision.gameObject);
         }
     }
 }
+
