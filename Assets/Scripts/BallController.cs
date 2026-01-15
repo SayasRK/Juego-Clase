@@ -3,7 +3,6 @@
 public class BallController : MonoBehaviour
 {
     public float speed = 8f;
-    public bool isExtraBall = false;
 
     private Rigidbody2D rb;
 
@@ -11,37 +10,34 @@ public class BallController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
 
-        SpriteRenderer sr = GetComponent<SpriteRenderer>();
-        if (sr != null)
-        {
-            sr.color = isExtraBall ? Color.blue : Color.white;
-        }
+        // Registramos esta bola como activa
+        GameManager.Instance.RegisterBall();
 
         LaunchBall();
     }
 
     void LaunchBall()
     {
-        Vector2 direction = new Vector2(Random.Range(-1f, 1f), 1).normalized;
-        rb.linearVelocity = direction * speed; 
+        Vector2 direction = new Vector2(Random.Range(-1f, 1f), 1f).normalized;
+        rb.linearVelocity = direction * speed;
     }
 
-    public void ResetBall()
+    private void OnDestroy()
     {
-        rb.linearVelocity = Vector2.zero; // Detenemos la bola
-        transform.position = Vector3.zero; // Puedes ajustar la posición si quieres
-        LaunchBall(); // La relanzamos
+        // Avisamos al GameManager cuando esta bola desaparece
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.BallDestroyed();
+        }
     }
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        //Colision de la pala
-
+        //COLISIÓN CON LA PALA
         if (collision.gameObject.CompareTag("Paddle"))
         {
             float paddleX = collision.transform.position.x;
             float hitX = transform.position.x;
-
             float paddleWidth = collision.collider.bounds.size.x;
 
             float offset = (hitX - paddleX) / (paddleWidth / 2f);
@@ -49,19 +45,16 @@ public class BallController : MonoBehaviour
             Vector2 currentDir = rb.linearVelocity.normalized;
             Vector2 paddleDir = new Vector2(offset, 1f).normalized;
 
+            // Influencia de la pala sobre la trayectoria de la bola para que sea un movimiento natural 
             float influence = 0.6f;
-            //Cambiando esto conseguimos que el rebote sea mas o menos natural, mas o menos fuerte. 
 
             Vector2 finalDir = Vector2.Lerp(currentDir, paddleDir, influence).normalized;
             rb.linearVelocity = finalDir * speed;
 
             return;
-
-            //Control del comportamiento de la bola y ajuste del rebote contra la pala
-            //Para poder conseguir esa fluidez de la trayectoria de la bola 
         }
 
-        // Colision del ladrillo 
+        //COLISIÓN CON LADRILLOS 
 
         if (collision.gameObject.CompareTag("Brick"))
         {

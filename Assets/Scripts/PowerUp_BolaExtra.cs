@@ -15,22 +15,25 @@ public class PowerUp_BolaExtra : MonoBehaviour
         if (other.CompareTag("Paddle"))
         {
             SpawnExtraBall();
+
+            // Sumamos una vida al coger el power-up
+            GameManager.Instance.AddLife(1);
+
             Destroy(gameObject);
         }
     }
 
     void SpawnExtraBall()
     {
-        GameObject newBall = Instantiate(ballPrefab, transform.position, Quaternion.identity);
-
-        // Marcar como bola extra (esto es lo importante)
-        BallController bc = newBall.GetComponent<BallController>();
-        if (bc != null)
+        if (ballPrefab == null)
         {
-            bc.isExtraBall = true;
+            Debug.LogError("PowerUp_BolaExtra: ballPrefab NO asignado.");
+            return;
         }
 
-        newBall.tag = "BallExtra";
+        // Spawn un poco por encima de la pala para que al cojer el power up la "bola extra" pueda salir
+        Vector3 spawnPos = transform.position + Vector3.up * 0.6f;
+
+        Instantiate(ballPrefab, spawnPos, Quaternion.identity);
     }
 }
-

@@ -4,16 +4,14 @@ public class LoseZone : MonoBehaviour
 {
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("BallMain"))
-        {
-            Destroy(other.gameObject);
-            GameManager.Instance.LoseLife();
-        }
-        else if (other.CompareTag("BallExtra"))
+        // Si entra una bola, simplemente se destruye
+        if (other.CompareTag("Ball"))
         {
             Destroy(other.gameObject);
         }
-        else if (other.CompareTag("PowerUp"))
+
+        // Limpiamos power-ups que caigan fuera
+        if (other.CompareTag("PowerUp"))
         {
             Destroy(other.gameObject);
         }

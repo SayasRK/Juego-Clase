@@ -17,9 +17,8 @@ public class GameManager : MonoBehaviour
     public GameObject ballPrefab;
     public Transform ballSpawnPoint;
 
-    public bool IsRestarting = false;
-
-
+    // Número de bolas activas en pantalla
+    public int activeBalls = 0;
 
     private void Awake()
     {
@@ -31,16 +30,27 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        Time.timeScale = 1f;
         UpdateLivesUI();
         UpdateScoreUI();
+
+        // Al empezar la partida siempre hay una bola
+        SpawnBall();
     }
 
-    // ---------- SCORE ----------
+
     public void AddScore(int amount)
     {
         score += amount;
         UpdateScoreUI();
     }
+
+    public void AddLife(int amount = 1)
+    {
+        lives += amount;
+        UpdateLivesUI();
+    }
+
 
     void UpdateScoreUI()
     {
@@ -48,7 +58,7 @@ public class GameManager : MonoBehaviour
             scoreText.text = "Score: " + score;
     }
 
-    // ---------- BRICKS ----------
+    
     public void RegisterBrick()
     {
         remainingBricks++;
@@ -65,9 +75,24 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void RegisterBall()
+    {
+        activeBalls++;
+    }
 
-    // ---------- LIVES ----------
-    public void LoseLife()
+    public void BallDestroyed()
+    {
+        activeBalls--;
+
+        // Si ya no queda ninguna bola, se pierde una vida
+        if (activeBalls <= 0)
+        {
+            LoseLife();
+        }
+    }
+
+
+    void LoseLife()
     {
         lives--;
         UpdateLivesUI();
@@ -80,7 +105,6 @@ public class GameManager : MonoBehaviour
 
         SpawnBall();
     }
-
 
     void UpdateLivesUI()
     {
@@ -95,7 +119,6 @@ public class GameManager : MonoBehaviour
 
     void RestartGame()
     {
-        IsRestarting = true;
         Time.timeScale = 1f;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
@@ -107,5 +130,4 @@ public class GameManager : MonoBehaviour
         if (winText != null)
             winText.SetActive(true);
     }
-
 }
