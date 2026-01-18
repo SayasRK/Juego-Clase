@@ -14,11 +14,20 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI scoreText;
 
     public GameObject winText;
+    public GameObject restartButton;
     public GameObject ballPrefab;
     public Transform ballSpawnPoint;
 
     // Número de bolas activas en pantalla
     public int activeBalls = 0;
+
+    private bool isQuitting = false;
+
+    private void OnApplicationQuit()
+{
+    isQuitting = true;
+}
+
 
     private void Awake()
     {
@@ -82,6 +91,8 @@ public class GameManager : MonoBehaviour
 
     public void BallDestroyed()
     {
+        if (isQuitting) return;
+
         activeBalls--;
 
         // Si ya no queda ninguna bola, se pierde una vida
@@ -91,9 +102,16 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void RestartGameFromButton()
+    {
+        RestartGame();
+    }
+
 
     void LoseLife()
     {
+        if (isQuitting) return;
+
         lives--;
         UpdateLivesUI();
 
@@ -129,5 +147,8 @@ public class GameManager : MonoBehaviour
 
         if (winText != null)
             winText.SetActive(true);
+
+        if (restartButton != null)
+            restartButton.SetActive(true);
     }
 }

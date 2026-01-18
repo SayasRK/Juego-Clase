@@ -56,10 +56,12 @@ public class BallController : MonoBehaviour
 
         //COLISIÓN CON LADRILLOS 
 
-        if (collision.gameObject.CompareTag("Brick"))
+        Brick brick = collision.gameObject.GetComponent<Brick>();
+        if (brick != null)
         {
-            Destroy(collision.gameObject);
+            brick.OnHit();
         }
+
     }
 }
 

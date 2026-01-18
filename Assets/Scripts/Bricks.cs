@@ -5,19 +5,16 @@ public class Brick : MonoBehaviour
     public int pointValue = 1;
     public GameObject[] powerUpPrefabs;
 
-    private void OnDestroy()
+    public void OnHit()
     {
-        // Si no estamos jugando, no hacemos nada
-        if (!Application.isPlaying) return;
-        if (GameManager.Instance == null) return;
-
         GameManager.Instance.BrickDestroyed(pointValue);
         TryDropPowerUp();
+        Destroy(gameObject);
     }
 
     void TryDropPowerUp()
     {
-        float dropChance = 0.1f; // 10%
+        float dropChance = 0.1f;
 
         if (powerUpPrefabs == null || powerUpPrefabs.Length == 0) return;
 
