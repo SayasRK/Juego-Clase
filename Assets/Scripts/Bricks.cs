@@ -3,10 +3,12 @@ using UnityEngine;
 public class Brick : MonoBehaviour
 {
     public int pointValue = 1;
-    public GameObject powerUpPrefab;
+    public GameObject[] powerUpPrefabs;
 
     private void OnDestroy()
     {
+        // Si no estamos jugando, no hacemos nada
+        if (!Application.isPlaying) return;
         if (GameManager.Instance == null) return;
 
         GameManager.Instance.BrickDestroyed(pointValue);
@@ -15,11 +17,14 @@ public class Brick : MonoBehaviour
 
     void TryDropPowerUp()
     {
-        float dropChance = 0.1f; // 10% de probabilidad
+        float dropChance = 0.1f; // 10%
 
-        if (powerUpPrefab != null && Random.value < dropChance)
+        if (powerUpPrefabs == null || powerUpPrefabs.Length == 0) return;
+
+        if (Random.value < dropChance)
         {
-            Instantiate(powerUpPrefab, transform.position, Quaternion.identity);
+            int index = Random.Range(0, powerUpPrefabs.Length);
+            Instantiate(powerUpPrefabs[index], transform.position, Quaternion.identity);
         }
     }
 }

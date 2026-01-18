@@ -148,4 +148,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pointValue: 1
-  powerUpPrefab: {fileID: 2734922084368014406, guid: 8a7a7b2bd705ee14392875f394709914, type: 3}
+  powerUpPrefabs:
+  - {fileID: 2734922084368014406, guid: 8a7a7b2bd705ee14392875f394709914, type: 3}
+  - {fileID: 744978574805582656, guid: eab31761bff05854a994fab3e1276d98, type: 3}
+  - {fileID: 5581714949062888259, guid: 1e5435b166ad13c4585e2201665c8f87, type: 3}
